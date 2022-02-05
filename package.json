@@ -1,8 +1,28 @@
 {
-  "dependencies": {
-    "package.json": "^2.0.1"
+
+  "name": "numble",
+
+  "source": "src/index.html",
+
+  "scripts": {
+
+    "start": "parcel",
+
+    "build": "parcel build"
+
   },
+
+  "dependencies": {
+
+    "nanny-state": "^3.0.2"
+
+  },
+
   "devDependencies": {
-    "parcel": "^2.2.1"
+
+    "parcel": "latest"
+
   }
+
 }
+
