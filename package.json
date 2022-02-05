@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "package.json": "^2.0.1"
+  },
+  "devDependencies": {
+    "parcel": "^2.2.1"
+  }
+}
