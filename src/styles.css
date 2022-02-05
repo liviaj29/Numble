@@ -1,0 +1,280 @@
+* {
+    box-sizing: border-box;
+    margin: 0 auto; padding: 0;
+  }
+  :active, :hover, :focus {
+    outline: 0!important;
+    outline-offset: 0;
+  }
+  ::before,
+  ::after {
+    position: absolute;
+    content: "";
+  }
+  
+  :root{
+    --green: #3ec335;
+    --yellow: #fecb69;
+    --black: #29272d;
+    --grey: #bfbfbf;
+    --dark-grey: #454545;
+    --primary: #80a2ad;
+    --secondary: #dc8d78;
+    --tile-size: 60px;
+    --grid-gap: 5px;
+    --width: 200px;
+  }
+  
+  html{
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  #app{
+    font-family: sans-serif;
+    margin: 0 auto;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    padding-bottom: 100px;
+  }
+  
+  #app[data-darkMode]{
+    background: var(--black);
+  }
+  
+  h1{
+    text-transform: uppercase;
+    letter-spacing: 0.069em;
+    font-size: 40px;
+    margin-bottom: 4px;
+    display: inline-block;
+    color: var(--primary);
+  }
+  
+  header{
+    border-bottom: 1px solid var(--primary);
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+    width: var(--width);
+  }
+  
+  h2{
+    color: var(--primary);
+    font-family: sans-serif;
+    font-size: 24px;
+  }
+  
+  button{
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    margin: 20px 0;
+    width: var(--width);
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  button:hover{
+    background: var(--secondary)
+  }
+  
+  #feedback{
+    font-size: 28px;
+    color: var(--primary);
+    margin: 20px auto;
+    width: var(--width);
+  }
+  
+  #guesses{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-gap: var(--grid-gap);
+    margin: auto;
+    font-weight: bold;
+    width: var(--width);
+  }
+  
+  #guesses .row{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: var(--grid-gap);
+  }
+  
+  #guesses .row div{
+    text-align: center;
+    line-height: 1em;
+    border: var(--grey) 2px solid;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    vertical-align: middle;
+    color: var(--black);
+    width: var(--tile-size);
+    height: var(--tile-size);
+    font-size: 24px;
+    border-radius: 50%;
+  }
+  
+  #guesses .row .grey{
+    background: --var(grey);
+  }
+  
+  #guesses .row .green{
+    color: white;
+    background: var(--green);
+    border-color: var(--green);
+  }
+  
+  #guesses .row .yellow{
+    color: white;
+    background: var(--yellow);
+    border-color: var(--yellow);
+  }
+  
+  #guesses .row .black{
+    color: white;
+    background: var(--black);
+    border-color: var(--black);
+  }
+  
+  #keyboard{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: var(--grid-gap);
+    width: var(--width);
+    margin: 20px auto 0;
+  }
+  
+  #keyboard button{
+    border: none;
+    color: var(--black);
+    width: var(--tile-size);
+    height: var(--tile-size);
+    font-size: 24px;
+    border-radius: 8px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--grey);
+    padding: 0;
+    margin: 0;
+  }
+  
+  #keyboard .green{
+    background: var(--green);
+    color: white;
+  }
+  
+  #keyboard .yellow{
+    background: var(--yellow);
+    color: white;
+  }
+  
+  #keyboard .black{
+    background: var(--black);
+    color: white;
+  }
+  
+  #keyboard .functional{
+    font-size: 12px;
+  }
+  
+  .scores{
+    color: var(--secondary);
+    font-size: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-transform: uppercase;
+    width: var(--width);
+  }
+  
+  .hidden{
+    visibility: hidden;
+  }
+  
+  footer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: var(--grid-gap);
+    width: var(--width);
+    margin: 0 auto;
+  }
+  
+  footer button{
+    background: var(--secondary);
+    width: initial;
+    font-size: 12px;
+  }
+  
+  footer button:hover{
+    background: var(--primary);
+  }
+  
+  #app[data-darkMode]{
+    background: var(--black);
+  }
+  
+  #app[data-darkMode] h1{
+    color: var(--secondary);
+  }
+  
+  #app[data-darkMode] .scores{
+    color: var(--primary);
+  }
+  
+  #app[data-darkMode] header{
+    border-color: var(--secondary);
+  }
+  
+  #app[data-darkMode] #keyboard button{
+    background: var(--grey);
+  }
+  
+  #app[data-darkMode] #keyboard button.green{
+    background: var(--green);
+    color: white;
+  }
+  
+  #app[data-darkMode] #keyboard button.yellow{
+    background: var(--yellow);
+    color: white;
+  }
+  
+  #app[data-darkMode] #keyboard button.black, #app[data-darkMode] #guesses .row .black{
+    background: var(--dark-grey);
+    color: white;
+  }
+  
+  #app[data-darkMode] #guesses .row div{
+    color: var(--grey);
+  }
+  
+  #app[data-darkMode] #guesses .row div.green,#app[data-darkMode] #guesses .row div.yellow{
+    color: white;
+  }
+  
+  #app[data-darkMode] button{
+    color: var(--black);
+    background: var(--secondary);
+  }
+  
+  #app[data-darkMode] button:hover{
+    background: var(--primary);
+  }
+  
+  #app[data-darkMode] #feedback{
+    color: var(--secondary);
+  }
+  
+  #app[data-darkMode] footer button{
+    background: var(--secondary);
+  }
+  
+  #app[data-darkMode] footer button{
+    background: var(--primary);
+  }
