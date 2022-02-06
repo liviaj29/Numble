@@ -131,7 +131,6 @@ button:hover{
   align-items: center;
   font-weight: bold;
   vertical-align: middle;
-  color: var(--black);
   width: var(--tile-size);
   height: var(--tile-size);
   font-size: 24px;
