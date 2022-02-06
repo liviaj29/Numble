@@ -38,7 +38,15 @@ ${state.digits.map((colour,index) => html`<button onclick=${e => Update(appear(i
 `
 :
 html`
-<h2>Guess the 3-digit multiple of 3</h2>
+<h2>How Many Numbles Can You Get?</h2>
+<p>Guess the Numble in 4 tries</p>
+<p>Each Numble is a multiple of three</p>
+<p>After each guess, the colour of the circles will change to let you know how close (or far) you were</p>
+<h3>Example</h3>
+<div class="guesses"><div class="row"><div class="green">1</div><div class="yellow">2</div><div class="black">3</div></div></div>
+<p>1 is in the number and also in the right place.</p>
+<p>2 is in the number but in the wrong place</p>
+<p>3 isn't in the number at all</p>
 <button class="action" onclick=${e => Update(start)}>START</button>`}</div>
 `
 // initial state
