@@ -72,6 +72,9 @@ h3{
 
 p{
   color: var(--black);
+  margin: 10px auto;
+  line-height: 1.2;
+  max-width: calc(2*var(--width));
 }
 
 button{
@@ -132,23 +135,23 @@ button:hover{
   border-radius: 50%;
 }
 
-.row .grey{
+.row div.grey{
   background: --var(grey);
 }
 
-.row .green{
+.row div.green{
   color: white;
   background: var(--green);
   border-color: var(--green);
 }
 
-.row .yellow{
+.row div.yellow{
   color: white;
   background: var(--yellow);
   border-color: var(--yellow);
 }
 
-.row .black{
+.row div.black{
   color: white;
   background: var(--black);
   border-color: var(--black);
