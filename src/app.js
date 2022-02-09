@@ -4,15 +4,11 @@ import { Nanny,html } from 'nanny-state';
 // (number,number) => number
 const randomNumber = (n,m) => Math.ceil(Math.random()*(n - m)+m)
 // () => string
-function generateNumber(){
-  const multipleOfThree = randomNumber(333,34)*3
-  console.log(multipleOfThree)
-  return {number: multipleOfThree.toString()}
-}
+const generateNumber = () => (3*randomNumber(333,34)).toString()
 // (array,array) => array
-function getColours(guesses,number){
-  return guesses.map((digit,index) => number.includes(digit) ? digit.toString() === number[index] ? "green" : "yellow": "black")
-}
+const getColours = (guesses,number) => guesses.map((digit,index) => number.includes(digit) ? digit.toString() === number[index] ? "green" : "yellow": "black")
+// View
+// state => html string
 // View
 // state => html string
 const View = state => html`
@@ -21,21 +17,26 @@ const View = state => html`
 <h1>Numble</h1>
 ${state.started ? html`<div class="scores"><p>Streak: ${state.streak}</p><p>Best: ${state.best}</p></div>` : ""}
 </header>
-${state.started ? 
+<main>
+${
+state.showStats ?
+html`<h2>Stats</h2>
+<div id="stats">
+<div class="played-stat">Played: ${state.played}</div>
+${state.stats.map((stat,index,array)=> html`<div class="guess-number">${index + 1}:</div><div class="stat" style=${`grid-column: 3/ ${stat ?  Math.ceil(20*stat/[...array].sort((a,b)=>b-a)[0]): 5};`}>${stat}</div>`)}
+</div>
+`
+:
+state.started ?
 html`<div id="guesses">
-${state.guesses.map((guess,index) => html`<div class="row">${guess.map((number,i) => html`<div class="${state.guessCount > index && getColours(guess,state.number)[i]}"}>${number}</div>`)}</div>`)}</div>
+${state.guesses.map((guess,index) => html`<div class="row">${guess.map((number,i) => html`<div class="${state.guessCount > index ? getColours(guess,state.number)[i] : "grey"}"}>${number}</div>`)}</div>`)}</div>
 <p id="feedback">${state.feedback}</p>
 <div id="keyboard">
 ${state.digits.map((colour,index) => html`<button onclick=${e => Update(appear(index))} class="${colour}" ?disabled=${!state.playing}>${index}</button>`)}
   <button class="functional" onclick=${e => Update(remove)}>DELETE</button>
   <button class="functional" onclick=${check(state.guesses[state.guessCount],state.number, state.count)}>ENTER</button>
 </div>
-<button ?disabled=${state.playing} class="${state.playing ? "hidden" : ""}" onclick=${e => Update(nextNumber)}>PLAY AGAIN</button>
-<footer>
-<button onclick=${e => Update(finish)}>FINISH</button>
-<button onclick=${e => Update(e => Update({dark: !state.dark}))}>${state.dark ? "LIGHT" : "DARK"} MODE</button>
-</footer>
-`
+<button ?disabled=${state.playing} class="${state.playing ? "hidden" : ""}" onclick=${e => Update(nextNumber)}>PLAY AGAIN</button>`
 :
 html`
 <h2>How Many Numbles Can You Get?</h2>
@@ -44,25 +45,36 @@ html`
 <p>After each guess, the colour of the circles will change to let you know how close (or far) you were</p>
 <h3>Example</h3>
 <div class="guesses"><div class="row"><div class="green">1</div><div class="yellow">2</div><div class="black">3</div></div></div>
-<p>1 is in the number and also in the right place</p>
+<p>1 is in the number and also in the right place.</p>
 <p>2 is in the number but in the wrong place</p>
-<p>3 isn't in the number at all</p>
-<button class="action" onclick=${e => Update(start)}>START</button>`}</div>
-`
+<p>3 isn't in the number at all</p>`
+}
+</main>
+<footer>
+<button onclick=${e => Update(state.playing ? finish : start)}>${state.started ? "END" : "START"}</button>
+<button onclick=${e => Update(e => Update({showStats: !state.showStats}))}>${state.showStats ? "BACK" : "STATS"}</button>
+<button onclick=${e => Update(e => Update({dark: !state.dark}))}>${state.dark ? "LIGHT" : "DARK"} MODE</button>
+</footer>
+</div>`
+
+
 // initial state
 const State = {
-  ...generateNumber(),
+  number: generateNumber(),
   started: false,
   playing: false,
+  showStats: false,
   digits: Array(10).fill('grey'),
   guesses: [Array(3).fill(null),Array(3).fill(null),Array(3).fill(null),Array(3).fill(null)],
   count: 0,
   guessCount: 0,
   feedback: "Guess 3 digits",
+  played: 0,
   streak: 0,
   best: 0,
-  LocalStorageKey: "numble-local-storage",
   dark: false,
+  stats: [0,0,0,0],
+  LocalStorageKey: "numble-bumble",
   View
 }
 // Event handlers
@@ -98,22 +110,28 @@ const provideFeedback = (guesses,colours,numble) => state => ({
   feedback: numble ? "NUMBLE!" : state.guessCount < 3 ? "Keep going..." : `Nope! It was ${state.number}`,
   playing: !numble && state.guessCount < 3,
   streak: numble ? state.streak + 1 : state.guessCount < 3 ? state.streak : 0,
-  best: numble && state.streak + 1 > state.best ? state.streak + 1 : state.best
+  best: numble && state.streak + 1 > state.best ? state.streak + 1 : state.best,
+  stats: numble ? state.stats.map((n,i) => i === state.guessCount ? n + 1 : n) : state.stats,
+  played: numble || state.guessCount === 3 ? state.played + 1 : state.played
 })
 // state => state
 const nextNumber = state => ({
   ...State,
-  ...generateNumber(),
+  number: generateNumber(),
   started: true,
   playing: true,
   streak: state.streak,
   best: state.best,
-  dark: state.dark
+  dark: state.dark,
+  played: state.played,
+  stats: state.stats
 })
 // state => state
 const finish = state => ({
   ...State,
-  ...generateNumber(),
+  number: generateNumber(),
+  played: state.played,
+  stats: state.stats,
   best: state.best,
   dark: state.dark
 })
