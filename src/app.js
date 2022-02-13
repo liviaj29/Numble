@@ -74,11 +74,11 @@ const State = {
   count: 0,
   guessCount: 0,
   feedback: "Guess 3 digits",
-  played: 27,
+  played: 0,
   streak: 0,
-  best: 20,
+  best: 0,
   dark: false,
-  stats: [3,5,6,12],
+  stats: [0,0,0,0],
   LocalStorageKey: "numble-share",
   View
 }
