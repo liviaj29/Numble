@@ -79,7 +79,7 @@ const State = {
   best: 0,
   dark: false,
   stats: [0,0,0,0],
-  LocalStorageKey: "numble-share",
+  LocalStorageKey: "numble-sharing",
   View
 }
 // Event handlers
