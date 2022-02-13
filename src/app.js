@@ -26,7 +26,7 @@ html`<h2>Stats</h2>
 <div id="bars">
 ${state.stats.map((stat,index,array)=> html`<div class="guess-number">${index + 1}:</div><div class="stat" style=${`grid-column: 3/ ${stat ?  5 + ~~(17*stat/[...array].sort((a,b)=>b-a)[0]): 5};`}>${stat}</div>`)}
 </div>
-<p>Numble %: ${Math.round(100*state.stats.reduce((sum,n)=>sum+n)/state.played)}</p>
+<p>Numble %: ${state.played === 0 ? 0: Math.round(100*state.stats.reduce((sum,n)=>sum+n)/state.played)}</p>
 <p>Best Streak: ${state.best}</p>
 <button onclick=${e=> navigator.share({title:"NUMBLE!",text:`My best Numble streak is ${state.best} ${"🟢".repeat(state.best)}` })}>Share</button>
 </div>
