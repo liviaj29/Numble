@@ -15,15 +15,20 @@ const View = state => html`
 <div id="app" ?data-darkMode=${state.dark}>
 <header>
 <h1>Numble</h1>
-${state.started ? html`<div class="scores"><p>Streak: ${state.streak}</p><p>Best: ${state.best}</p></div>` : ""}
+${state.started && !state.showStats ? html`<div class="scores"><p>Streak: ${state.streak}</p><p>Best: ${state.best}</p></div>` : ""}
 </header>
 <main>
 ${
 state.showStats ?
 html`<h2>Stats</h2>
 <div id="stats">
-<div class="played-stat">Played: ${state.played}</div>
-${state.stats.map((stat,index,array)=> html`<div class="guess-number">${index + 1}:</div><div class="stat" style=${`grid-column: 3/ ${stat ?  Math.ceil(20*stat/[...array].sort((a,b)=>b-a)[0]): 5};`}>${stat}</div>`)}
+<p>Played: ${state.played} games</p>
+<div id="bars">
+${state.stats.map((stat,index,array)=> html`<div class="guess-number">${index + 1}:</div><div class="stat" style=${`grid-column: 3/ ${stat ?  5 + ~~(17*stat/[...array].sort((a,b)=>b-a)[0]): 5};`}>${stat}</div>`)}
+</div>
+<p>Numble %: ${Math.round(100*state.stats.reduce((sum,n)=>sum+n)/state.played)}</p>
+<p>Best Streak: ${state.best}</p>
+<button onclick=${e=> navigator.share({title:"NUMBLE!",text:`My best Numble streak is ${state.best} ${"🟢".repeat(state.best)}` })}>Share</button>
 </div>
 `
 :
@@ -32,9 +37,9 @@ html`<div id="guesses">
 ${state.guesses.map((guess,index) => html`<div class="row">${guess.map((number,i) => html`<div class="${state.guessCount > index ? getColours(guess,state.number)[i] : "grey"}"}>${number}</div>`)}</div>`)}</div>
 <p id="feedback">${state.feedback}</p>
 <div id="keyboard">
-${state.digits.map((colour,index) => html`<button onclick=${e => Update(appear(index))} class="${colour}" ?disabled=${!state.playing}>${index}</button>`)}
-  <button class="functional" onclick=${e => Update(remove)}>DELETE</button>
-  <button class="functional" onclick=${check(state.guesses[state.guessCount],state.number, state.count)}>ENTER</button>
+${state.digits.map((colour,index) => html`<button id=${"key-"+index} onclick=${e => Update(appear(index))} class="${colour}" ?disabled=${!state.playing}>${index}</button>`)}
+  <button id="key-delete" class="functional" onclick=${e => Update(remove)}>DELETE</button>
+  <button id="key-enter" class="functional" onclick=${check(state.guesses[state.guessCount],state.number, state.count)}>ENTER</button>
 </div>
 <button ?disabled=${state.playing} class="${state.playing ? "hidden" : ""}" onclick=${e => Update(nextNumber)}>PLAY AGAIN</button>`
 :
@@ -52,7 +57,7 @@ html`
 </main>
 <footer>
 <button onclick=${e => Update(state.playing ? finish : start)}>${state.started ? "END" : "START"}</button>
-<button onclick=${e => Update(e => Update({showStats: !state.showStats}))}>${state.showStats ? "BACK" : "STATS"}</button>
+<button onclick=${e => Update(e => Update({showStats: !state.showStats}))}>${state.showStats ? "CLOSE" : "STATS"}</button>
 <button onclick=${e => Update(e => Update({dark: !state.dark}))}>${state.dark ? "LIGHT" : "DARK"} MODE</button>
 </footer>
 </div>`
@@ -69,12 +74,12 @@ const State = {
   count: 0,
   guessCount: 0,
   feedback: "Guess 3 digits",
-  played: 0,
+  played: 27,
   streak: 0,
-  best: 0,
+  best: 20,
   dark: false,
-  stats: [0,0,0,0],
-  LocalStorageKey: "numble-bumble",
+  stats: [3,5,6,12],
+  LocalStorageKey: "numble-share",
   View
 }
 // Event handlers
@@ -90,7 +95,7 @@ const check = (guesses, number, count) => event => {
 // state => state
 const start = state => ({
   started: true,
-  playing: true
+  playing: true,
 })
 // array => state => state
 const appear = guess => state => ({
@@ -133,7 +138,8 @@ const finish = state => ({
   played: state.played,
   stats: state.stats,
   best: state.best,
-  dark: state.dark
+  dark: state.dark,
+  showStats: false,
 })
 // Start a new Nanny State
 const Update = Nanny(State)
