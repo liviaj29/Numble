@@ -50,7 +50,7 @@ html`
 <p>After each guess, the colour of the circles will change to let you know how close (or far) you were</p>
 <h3>Example</h3>
 <div class="guesses"><div class="row"><div class="green">1</div><div class="yellow">2</div><div class="black">3</div></div></div>
-<p>1 is in the number and also in the right place.</p>
+<p>1 is in the number and also in the right place</p>
 <p>2 is in the number but in the wrong place</p>
 <p>3 isn't in the number at all</p>`
 }
