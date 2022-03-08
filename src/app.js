@@ -39,7 +39,7 @@ ${state.guesses.map((guess,index) => html`<div class="row">${guess.map((number,i
 <div id="keyboard">
 ${state.digits.map((colour,index) => html`<button id=${"key-"+index} onclick=${e => Update(appear(index))} class="${colour}" ?disabled=${!state.playing}>${index}</button>`)}
   <button id="key-delete" class="functional" onclick=${e => Update(remove)}>DELETE</button>
-  <button id="key-enter" class="functional" onclick=${check(state.guesses[state.guessCount],state.number, state.count)}>ENTER</button>
+  <button id="key-enter" class="functional" onclick=${check}>ENTER</button>
 </div>
 <button ?disabled=${state.playing} class="${state.playing ? "hidden" : ""}" onclick=${e => Update(nextNumber)}>PLAY AGAIN</button>`
 :
@@ -83,14 +83,16 @@ const State = {
   View
 }
 // Event handlers
-const check = (guesses, number, count) => event => {
-  if (count < 3) Update({feedback: "too short"})
-  else {
-    const numble = guesses.join('') === number
-    const colours = getColours(guesses,number)
-  Update(provideFeedback(guesses,colours, numble))
-  }
+
+
+const check = event => Update(provideFeedback)
+
+const keyboard = event => {
+  const digit = Number(event.key)
+  Update(digit === digit ? appear(digit) : event.key === "Backspace" ? remove : event.key === "Enter" ? provideFeedback : {})
 }
+// keyboard event listener
+document.addEventListener("keydown",keyboard)
 // Transformer functions
 // state => state
 const start = state => ({
@@ -103,12 +105,23 @@ const appear = guess => state => ({
   count: state.count + 1,
 })
 // state => state
-const remove = state => ({
-  guesses: state.guesses.map((array,index) => index === state.guessCount ? array.map((digit,index) => index === state.count - 1 ? null : digit) : array),
-  count: state.count - 1
-})
+const remove = state => {
+  if(state.guesses[state.guessCount][0]) return {
+    guesses: state.guesses.map((array,index) => index === state.guessCount ? array.map((digit,index) => index === state.count - 1 ? null : digit) : array),
+    count: state.count - 1
+  }
+}
 // (array,array,Boolean) => state => state
-const provideFeedback = (guesses,colours,numble) => state => ({
+const provideFeedback = state => {
+  const guesses = state.guesses[state.guessCount]
+  const numble = guesses.join`` === state.number
+  const colours = getColours(guesses,state.number)
+  return state.count < 3 ?
+  {
+    feedback: "too short"
+  }
+  :
+{
   digits: state.digits.map((colour,index) => guesses.includes(index) ? colours[guesses.indexOf(index)] : colour),
   count: 0,
   guessCount: state.guessCount + 1,
@@ -118,7 +131,8 @@ const provideFeedback = (guesses,colours,numble) => state => ({
   best: numble && state.streak + 1 > state.best ? state.streak + 1 : state.best,
   stats: numble ? state.stats.map((n,i) => i === state.guessCount ? n + 1 : n) : state.stats,
   played: numble || state.guessCount === 3 ? state.played + 1 : state.played
-})
+}
+}
 // state => state
 const nextNumber = state => ({
   ...State,
