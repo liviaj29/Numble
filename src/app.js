@@ -101,8 +101,8 @@ const start = state => ({
 })
 // array => state => state
 const appear = guess => state => ({
-  guesses: state.guesses.map((array,index) => index === state.guessCount ? array.map((digit,index) => index === state.count ? guess : digit) : array),
-  count: state.count + 1,
+  guesses: state.count < 3 ? state.guesses.map((array,index) => index === state.guessCount ? array.map((digit,index) => index === state.count ? guess : digit) : array) : state.guesses,
+  count: state.count < 3 ? state.count + 1 : state.count,
 })
 // state => state
 const remove = state => {
