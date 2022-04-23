@@ -57,8 +57,8 @@ html`
 </main>
 <footer>
 <button onclick=${e => Update(state.playing ? finish : start)}>${state.started ? "END" : "START"}</button>
-<button onclick=${e => Update(e => Update({showStats: !state.showStats}))}>${state.showStats ? "CLOSE" : "STATS"}</button>
-<button onclick=${e => Update(e => Update({dark: !state.dark}))}>${state.dark ? "LIGHT" : "DARK"} MODE</button>
+<button onclick=${e => Update({showStats: !state.showStats})}>${state.showStats ? "CLOSE" : "STATS"}</button>
+<button onclick=${e => Update({dark: !state.dark})}>${state.dark ? "LIGHT" : "DARK"} MODE</button>
 </footer>
 </div>`
 
@@ -106,7 +106,7 @@ const appear = guess => state => ({
 })
 // state => state
 const remove = state => {
-  if(state.guesses[state.guessCount][0]) return {
+  if(!isNull(state.guesses[state.guessCount][0])) return {
     guesses: state.guesses.map((array,index) => index === state.guessCount ? array.map((digit,index) => index === state.count - 1 ? null : digit) : array),
     count: state.count - 1
   }
