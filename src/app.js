@@ -106,7 +106,7 @@ const appear = guess => state => ({
 })
 // state => state
 const remove = state => {
-  if(!isNull(state.guesses[state.guessCount][0])) return {
+  if(state.guesses[state.guessCount][0] || state.guesses[state.guessCount][0] === 0) return {
     guesses: state.guesses.map((array,index) => index === state.guessCount ? array.map((digit,index) => index === state.count - 1 ? null : digit) : array),
     count: state.count - 1
   }
